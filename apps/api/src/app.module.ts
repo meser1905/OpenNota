@@ -14,7 +14,10 @@ import { AppConfig } from './config/app-config';
 import { CoreConfigModule } from './config/core-config.module';
 import { AcademicModule } from './modules/academic/academic.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { EvaluationsModule } from './modules/evaluations/evaluations.module';
+import { GradesModule } from './modules/grades/grades.module';
 import { InstitutionsModule } from './modules/institutions/institutions.module';
+import { ReportsModule } from './modules/reports/reports.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -45,6 +48,9 @@ import { UsersModule } from './modules/users/users.module';
     InstitutionsModule,
     AcademicModule,
     UsersModule,
+    EvaluationsModule,
+    GradesModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [
