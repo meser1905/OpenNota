@@ -12,7 +12,10 @@ import { MailerModule } from './common/mailer/mailer.module';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { AppConfig } from './config/app-config';
 import { CoreConfigModule } from './config/core-config.module';
+import { AcademicModule } from './modules/academic/academic.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { InstitutionsModule } from './modules/institutions/institutions.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -39,6 +42,9 @@ import { AuthModule } from './modules/auth/auth.module';
     JobsModule,
     MailerModule,
     AuthModule,
+    InstitutionsModule,
+    AcademicModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
