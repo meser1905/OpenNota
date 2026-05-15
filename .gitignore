@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+
+# Database (SQLite) — recreated by migrations + seed
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+packages/db/data/*
+!packages/db/data/.gitkeep
+
+# Local dev artifacts
+emails/*
+!emails/.gitkeep
+uploads/*
+!uploads/.gitkeep
+generated/*
+!generated/.gitkeep
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Testing
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

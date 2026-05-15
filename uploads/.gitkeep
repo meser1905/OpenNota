@@ -1,0 +1,2 @@
+# Keeps uploads/ in version control.
+# Uploaded files are stored here and are gitignored.

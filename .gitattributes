@@ -1,0 +1,15 @@
+# Normalize line endings to LF across all platforms
+* text=auto eol=lf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+
+# Generated files — collapse in diffs
+pnpm-lock.yaml linguist-generated=true

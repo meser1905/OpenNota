@@ -1,0 +1,2 @@
+# Keeps emails/ in version control.
+# Development emails are written here as .eml files and are gitignored.
