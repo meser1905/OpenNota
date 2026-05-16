@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import type { Subject, TeacherSubject } from '@opennota/db';
 import type { AssignTeacherInput, CreateSubjectInput, UpdateSubjectInput } from '@opennota/shared';
+import type { JwtPayload } from '../../common/auth/jwt-payload';
 import { PrismaService } from '../../common/prisma/prisma.service';
 
 /**
@@ -14,6 +15,23 @@ export class SubjectsService {
   findAll(classGroupId?: string) {
     return this.prisma.subject.findMany({
       where: { deletedAt: null, ...(classGroupId ? { classGroupId } : {}) },
+      orderBy: { name: 'asc' },
+    });
+  }
+
+  /**
+   * Subjects the current user can work with: a teacher's assigned subjects, or
+   * every subject for staff. Used by the grade-entry and evaluation screens,
+   * where teachers need to discover their own subjects.
+   */
+  findMine(user: JwtPayload) {
+    const where =
+      user.role === 'TEACHER'
+        ? { deletedAt: null, teacherSubjects: { some: { teacher: { userId: user.sub } } } }
+        : { deletedAt: null };
+    return this.prisma.subject.findMany({
+      where,
+      include: { classGroup: { select: { id: true, name: true } } },
       orderBy: { name: 'asc' },
     });
   }

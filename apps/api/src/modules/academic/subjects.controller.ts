@@ -7,6 +7,8 @@ import {
   type UpdateSubjectInput,
   updateSubjectSchema,
 } from '@opennota/shared';
+import type { JwtPayload } from '../../common/auth/jwt-payload';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe';
 import { SubjectsService } from './subjects.service';
@@ -19,6 +21,13 @@ export class SubjectsController {
   @Get()
   findAll(@Query('classGroupId') classGroupId?: string) {
     return this.subjectsService.findAll(classGroupId);
+  }
+
+  /** Subjects the current user can grade: a teacher's own, all for staff. */
+  @Roles('ADMIN', 'PRINCIPAL', 'TEACHER')
+  @Get('mine')
+  findMine(@CurrentUser() user: JwtPayload) {
+    return this.subjectsService.findMine(user);
   }
 
   @Get(':id')
