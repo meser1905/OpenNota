@@ -1,0 +1,2 @@
+# Keeps packages/db/data/ in version control.
+# The SQLite database (opennota.db) is created here by migrations and is gitignored.
