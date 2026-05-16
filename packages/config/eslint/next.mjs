@@ -6,6 +6,7 @@ import baseConfig from './base.mjs';
 
 /** ESLint flat config for the Next.js frontend. */
 export default [
+  { ignores: ['.next/**', 'next-env.d.ts'] },
   ...baseConfig,
   {
     files: ['**/*.{ts,tsx,js,jsx}'],

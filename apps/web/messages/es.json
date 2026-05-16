@@ -1,0 +1,228 @@
+{
+  "app": {
+    "name": "OpenNota",
+    "tagline": "Plataforma open source de gestión escolar y calificaciones"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "create": "Crear",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "search": "Buscar",
+    "actions": "Acciones",
+    "back": "Volver",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "error": "Ocurrió un error",
+    "noResults": "No hay resultados para mostrar",
+    "retry": "Reintentar",
+    "all": "Todos",
+    "yes": "Sí",
+    "no": "No",
+    "saved": "Cambios guardados",
+    "deleted": "Elemento eliminado",
+    "created": "Elemento creado",
+    "updated": "Elemento actualizado",
+    "confirmDelete": "¿Confirmás que querés eliminar este elemento?"
+  },
+  "auth": {
+    "loginTitle": "Iniciar sesión",
+    "loginSubtitle": "Ingresá con tu cuenta para continuar",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "signIn": "Ingresar",
+    "signingIn": "Ingresando...",
+    "signOut": "Cerrar sesión",
+    "invalidCredentials": "Correo o contraseña incorrectos",
+    "sessionExpired": "Tu sesión expiró, volvé a ingresar"
+  },
+  "roles": {
+    "ADMIN": "Administrador",
+    "PRINCIPAL": "Director",
+    "TEACHER": "Docente",
+    "STUDENT": "Estudiante",
+    "GUARDIAN": "Tutor"
+  },
+  "nav": {
+    "dashboard": "Inicio",
+    "institutions": "Instituciones",
+    "academicYears": "Años lectivos",
+    "classGroups": "Cursos",
+    "subjects": "Asignaturas",
+    "evaluations": "Evaluaciones",
+    "grades": "Calificaciones",
+    "reportCards": "Boletines",
+    "users": "Usuarios",
+    "profile": "Perfil"
+  },
+  "dashboard": {
+    "welcome": "Hola, {name}",
+    "subtitle": "Este es el resumen de tu actividad en OpenNota",
+    "teacherSubjects": "Tus asignaturas",
+    "teacherSubjectsEmpty": "Todavía no tenés asignaturas asignadas",
+    "upcomingEvaluations": "Próximas evaluaciones",
+    "upcomingEvaluationsEmpty": "No hay evaluaciones próximas",
+    "quickActions": "Acciones rápidas",
+    "myAverages": "Mis promedios",
+    "averagesEmpty": "Todavía no hay calificaciones cargadas",
+    "statTotalStudents": "Estudiantes",
+    "statTotalSubjects": "Asignaturas",
+    "statTotalClassGroups": "Cursos",
+    "openGradeSheet": "Cargar calificaciones",
+    "viewReportCard": "Ver boletín"
+  },
+  "institutions": {
+    "title": "Instituciones",
+    "subtitle": "Gestioná las instituciones educativas",
+    "name": "Nombre",
+    "taxId": "Identificación fiscal",
+    "address": "Dirección",
+    "phone": "Teléfono",
+    "email": "Correo electrónico",
+    "new": "Nueva institución",
+    "empty": "Todavía no hay instituciones"
+  },
+  "academicYears": {
+    "title": "Años lectivos",
+    "subtitle": "Definí los años lectivos y sus períodos",
+    "year": "Año",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de fin",
+    "active": "Activo",
+    "institution": "Institución",
+    "new": "Nuevo año lectivo",
+    "empty": "Todavía no hay años lectivos",
+    "terms": "Períodos",
+    "termName": "Nombre del período",
+    "termType": "Tipo",
+    "termNumber": "Número",
+    "newTerm": "Nuevo período",
+    "closed": "Cerrado"
+  },
+  "termTypes": {
+    "TRIMESTER": "Trimestre",
+    "QUARTER": "Cuatrimestre",
+    "BIMESTER": "Bimestre"
+  },
+  "classGroups": {
+    "title": "Cursos",
+    "subtitle": "Gestioná los cursos y sus divisiones",
+    "name": "Nombre",
+    "level": "Nivel",
+    "year": "Año",
+    "section": "División",
+    "new": "Nuevo curso",
+    "empty": "Todavía no hay cursos"
+  },
+  "educationLevels": {
+    "KINDERGARTEN": "Inicial",
+    "PRIMARY": "Primaria",
+    "SECONDARY": "Secundaria"
+  },
+  "subjects": {
+    "title": "Asignaturas",
+    "subtitle": "Gestioná las asignaturas de cada curso",
+    "name": "Nombre",
+    "description": "Descripción",
+    "color": "Color",
+    "classGroup": "Curso",
+    "teachers": "Docentes",
+    "new": "Nueva asignatura",
+    "empty": "Todavía no hay asignaturas",
+    "assignTeacher": "Asignar docente",
+    "lead": "Titular"
+  },
+  "evaluations": {
+    "title": "Evaluaciones",
+    "subtitle": "Creá y gestioná las evaluaciones",
+    "evaluationTitle": "Título",
+    "description": "Descripción",
+    "type": "Tipo",
+    "date": "Fecha",
+    "weight": "Ponderación",
+    "scale": "Escala",
+    "maxScore": "Puntaje máximo",
+    "minScore": "Puntaje mínimo",
+    "passingScore": "Puntaje de aprobación",
+    "published": "Publicada",
+    "draft": "Borrador",
+    "subject": "Asignatura",
+    "term": "Período",
+    "new": "Nueva evaluación",
+    "empty": "Todavía no hay evaluaciones"
+  },
+  "evaluationTypes": {
+    "EXAM": "Examen",
+    "ASSIGNMENT": "Trabajo práctico",
+    "PERFORMANCE": "Desempeño",
+    "ORAL": "Oral",
+    "PROJECT": "Proyecto"
+  },
+  "gradeScales": {
+    "NUMERIC_1_10": "Numérica 1 a 10",
+    "NUMERIC_1_100": "Numérica 1 a 100",
+    "CONCEPTUAL": "Conceptual",
+    "PERCENTAGE": "Porcentual"
+  },
+  "grades": {
+    "title": "Calificaciones",
+    "subtitle": "Cargá las calificaciones de tus estudiantes",
+    "selectSubject": "Seleccioná una asignatura",
+    "selectTerm": "Seleccioná un período",
+    "student": "Estudiante",
+    "absent": "Ausente",
+    "comments": "Observaciones",
+    "average": "Promedio",
+    "saving": "Guardando...",
+    "savedCell": "Guardado",
+    "saveError": "No se pudo guardar",
+    "weightConfig": "Ponderación por tipo",
+    "weightSumError": "Las ponderaciones deben sumar 100",
+    "weightSaved": "Ponderación guardada",
+    "noEvaluations": "Creá una evaluación para empezar a calificar"
+  },
+  "reportCards": {
+    "title": "Boletines",
+    "subtitle": "Consultá los boletines de calificaciones",
+    "selectStudent": "Seleccioná un estudiante",
+    "selectTerm": "Seleccioná un período",
+    "downloadPdf": "Descargar PDF",
+    "overallAverage": "Promedio general",
+    "subject": "Asignatura",
+    "status": "Estado",
+    "passed": "Aprobado",
+    "failed": "Desaprobado",
+    "pending": "Sin calificar",
+    "noGrades": "Sin notas",
+    "empty": "No hay datos para este período"
+  },
+  "users": {
+    "title": "Usuarios",
+    "subtitle": "Gestioná las cuentas de usuario",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "role": "Rol",
+    "active": "Activo",
+    "new": "Nuevo usuario",
+    "empty": "Todavía no hay usuarios"
+  },
+  "profile": {
+    "title": "Mi perfil",
+    "subtitle": "Tus datos de cuenta"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Intentá de nuevo.",
+    "notFound": "No se encontró el recurso solicitado",
+    "forbidden": "No tenés permiso para realizar esta acción",
+    "loadFailed": "No se pudieron cargar los datos"
+  },
+  "desktopOnly": {
+    "title": "Disponible en escritorio",
+    "message": "La carga de calificaciones está optimizada para pantallas grandes. Abrí OpenNota en una computadora para usar esta función."
+  }
+}
