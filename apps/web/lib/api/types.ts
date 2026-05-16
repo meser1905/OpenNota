@@ -5,7 +5,14 @@
  * `@opennota/db`, so these interfaces are declared here. Date columns arrive
  * over the wire as ISO 8601 strings.
  */
-import type { EducationLevel, TermType, UserRole } from '@opennota/shared';
+import type {
+  ConceptualGrade,
+  EducationLevel,
+  EvaluationType,
+  GradeScale,
+  TermType,
+  UserRole,
+} from '@opennota/shared';
 
 /** A school. */
 export interface Institution {
@@ -144,4 +151,117 @@ export interface Enrollment {
   createdAt: string;
   updatedAt: string;
   student: StudentProfile & { user: User };
+}
+
+/** A subject as returned by `GET /subjects/mine`, with its class group joined in. */
+export interface SubjectWithClassGroup extends Subject {
+  classGroup: { id: string; name: string };
+}
+
+/** A graded activity. `type` is an `EvaluationType` and `scale` a `GradeScale`. */
+export interface Evaluation {
+  id: string;
+  subjectId: string;
+  termId: string;
+  teacherId: string;
+  title: string;
+  description: string | null;
+  type: EvaluationType;
+  date: string;
+  weight: number;
+  scale: GradeScale;
+  maxScore: number;
+  minScore: number;
+  passingScore: number;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
+
+/** Per-subject/term weighting of the five evaluation types. */
+export interface GradingWeightConfig {
+  id: string;
+  subjectId: string;
+  termId: string;
+  examWeight: number;
+  assignmentWeight: number;
+  performanceWeight: number;
+  oralWeight: number;
+  projectWeight: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** The students-by-evaluations matrix backing the grade entry sheet. */
+export interface GradeSheet {
+  subject: { id: string; name: string };
+  evaluations: Array<{
+    id: string;
+    title: string;
+    type: EvaluationType;
+    date: string;
+    scale: GradeScale;
+    maxScore: number;
+    passingScore: number;
+    isPublished: boolean;
+  }>;
+  students: Array<{
+    id: string;
+    firstName: string;
+    lastName: string;
+    studentNumber: string;
+  }>;
+  grades: Array<{
+    evaluationId: string;
+    studentId: string;
+    numericValue: number | null;
+    conceptualValue: ConceptualGrade | null;
+    wasAbsent: boolean;
+    comments: string | null;
+  }>;
+}
+
+/** A student whose report card the current user may view. */
+export interface ReportCardStudent {
+  id: string;
+  firstName: string;
+  lastName: string;
+  studentNumber: string;
+}
+
+/** One evaluation row inside a report card subject. */
+export interface ReportCardEvaluation {
+  id: string;
+  title: string;
+  type: EvaluationType;
+  date: string;
+  maxScore: number;
+  numericValue: number | null;
+  conceptualValue: ConceptualGrade | null;
+  wasAbsent: boolean;
+}
+
+/** One subject's results inside a report card. */
+export interface ReportCardSubject {
+  subjectId: string;
+  name: string;
+  color: string | null;
+  average: number;
+  conceptualAverage: string | null;
+  passed: boolean;
+  hasGrades: boolean;
+  evaluations: ReportCardEvaluation[];
+}
+
+/** A student's full report card for a term, as returned by `GET /reports/report-card`. */
+export interface ReportCard {
+  student: ReportCardStudent;
+  institution: string;
+  classGroup: string | null;
+  term: { name: string; type: TermType };
+  academicYear: number;
+  subjects: ReportCardSubject[];
+  overallAverage: number;
+  generatedAt: string;
 }

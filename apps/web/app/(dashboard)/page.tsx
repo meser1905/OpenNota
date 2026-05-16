@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { auth } from '@/auth';
 import { NAV_ITEMS } from '@/components/dashboard/nav-config';
+import { TeacherSubjectsCard } from '@/components/dashboard/teacher-subjects-card';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function DashboardHomePage() {
@@ -23,6 +24,8 @@ export default async function DashboardHomePage() {
         </h1>
         <p className="text-muted-foreground">{t('dashboard.subtitle')}</p>
       </div>
+
+      {user.role === 'TEACHER' ? <TeacherSubjectsCard /> : null}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {quickLinks.map((item) => {
