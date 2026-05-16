@@ -12,6 +12,12 @@ export class ReportsController {
     private readonly reportPdfService: ReportPdfService,
   ) {}
 
+  /** Students whose report cards the current user may view (own/linked/all). */
+  @Get('students')
+  getViewableStudents(@CurrentUser() user: JwtPayload) {
+    return this.reportsService.getViewableStudents(user);
+  }
+
   /** Report card JSON. Access (own/linked vs any) is enforced in the service. */
   @Get('report-card/:studentId/:termId')
   getReportCard(

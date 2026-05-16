@@ -56,6 +56,51 @@ export class ReportsService {
     @Inject(JOB_RUNNER) private readonly jobRunner: JobRunner,
   ) {}
 
+  /** Students whose report cards the current user may view (own/linked/all). */
+  async getViewableStudents(
+    user: JwtPayload,
+  ): Promise<Array<{ id: string; firstName: string; lastName: string; studentNumber: string }>> {
+    if (user.role === 'STUDENT') {
+      const profile = await this.prisma.studentProfile.findUnique({
+        where: { userId: user.sub },
+        include: { user: true },
+      });
+      return profile
+        ? [
+            {
+              id: profile.id,
+              firstName: profile.user.firstName,
+              lastName: profile.user.lastName,
+              studentNumber: profile.studentNumber,
+            },
+          ]
+        : [];
+    }
+    if (user.role === 'GUARDIAN') {
+      const links = await this.prisma.studentGuardian.findMany({
+        where: { guardian: { userId: user.sub } },
+        include: { student: { include: { user: true } } },
+        orderBy: { student: { user: { lastName: 'asc' } } },
+      });
+      return links.map((link) => ({
+        id: link.student.id,
+        firstName: link.student.user.firstName,
+        lastName: link.student.user.lastName,
+        studentNumber: link.student.studentNumber,
+      }));
+    }
+    const profiles = await this.prisma.studentProfile.findMany({
+      include: { user: true },
+      orderBy: { user: { lastName: 'asc' } },
+    });
+    return profiles.map((profile) => ({
+      id: profile.id,
+      firstName: profile.user.firstName,
+      lastName: profile.user.lastName,
+      studentNumber: profile.studentNumber,
+    }));
+  }
+
   /** Builds a student's full report card for a term. */
   async getReportCard(user: JwtPayload, studentId: string, termId: string): Promise<ReportCard> {
     await this.assertCanViewStudent(user, studentId);
