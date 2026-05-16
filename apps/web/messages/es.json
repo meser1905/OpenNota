@@ -26,7 +26,15 @@
     "deleted": "Elemento eliminado",
     "created": "Elemento creado",
     "updated": "Elemento actualizado",
-    "confirmDelete": "¿Confirmás que querés eliminar este elemento?"
+    "confirmDelete": "¿Confirmás que querés eliminar este elemento?",
+    "confirmDeleteTitle": "Confirmar eliminación",
+    "select": "Seleccionar",
+    "manage": "Gestionar",
+    "none": "Ninguno",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "openMenu": "Abrir menú",
+    "loadFailed": "No se pudieron cargar los datos"
   },
   "auth": {
     "loginTitle": "Iniciar sesión",
@@ -52,6 +60,7 @@
     "academicYears": "Años lectivos",
     "classGroups": "Cursos",
     "subjects": "Asignaturas",
+    "enrollments": "Inscripciones",
     "evaluations": "Evaluaciones",
     "grades": "Calificaciones",
     "reportCards": "Boletines",
@@ -83,7 +92,10 @@
     "phone": "Teléfono",
     "email": "Correo electrónico",
     "new": "Nueva institución",
-    "empty": "Todavía no hay instituciones"
+    "empty": "Todavía no hay instituciones",
+    "createTitle": "Nueva institución",
+    "editTitle": "Editar institución",
+    "deleteConfirm": "Se eliminará la institución y sus años lectivos. Esta acción no se puede deshacer."
   },
   "academicYears": {
     "title": "Años lectivos",
@@ -100,7 +112,20 @@
     "termType": "Tipo",
     "termNumber": "Número",
     "newTerm": "Nuevo período",
-    "closed": "Cerrado"
+    "closed": "Cerrado",
+    "createTitle": "Nuevo año lectivo",
+    "editTitle": "Editar año lectivo",
+    "deleteConfirm": "Se eliminará el año lectivo y todos sus datos. Esta acción no se puede deshacer.",
+    "selectInstitution": "Seleccioná una institución",
+    "filterByInstitution": "Filtrar por institución",
+    "createTermTitle": "Nuevo período",
+    "editTermTitle": "Editar período",
+    "deleteTermConfirm": "Se eliminará el período. Esta acción no se puede deshacer.",
+    "manageTerms": "Períodos",
+    "termsFor": "Períodos de {year}",
+    "termsEmpty": "Este año lectivo todavía no tiene períodos",
+    "termStartDate": "Fecha de inicio",
+    "termEndDate": "Fecha de fin"
   },
   "termTypes": {
     "TRIMESTER": "Trimestre",
@@ -115,7 +140,14 @@
     "year": "Año",
     "section": "División",
     "new": "Nuevo curso",
-    "empty": "Todavía no hay cursos"
+    "empty": "Todavía no hay cursos",
+    "createTitle": "Nuevo curso",
+    "editTitle": "Editar curso",
+    "deleteConfirm": "Se eliminará el curso y sus asignaturas. Esta acción no se puede deshacer.",
+    "academicYear": "Año lectivo",
+    "selectAcademicYear": "Seleccioná un año lectivo",
+    "filterByAcademicYear": "Filtrar por año lectivo",
+    "selectLevel": "Seleccioná un nivel"
   },
   "educationLevels": {
     "KINDERGARTEN": "Inicial",
@@ -133,7 +165,20 @@
     "new": "Nueva asignatura",
     "empty": "Todavía no hay asignaturas",
     "assignTeacher": "Asignar docente",
-    "lead": "Titular"
+    "lead": "Titular",
+    "createTitle": "Nueva asignatura",
+    "editTitle": "Editar asignatura",
+    "deleteConfirm": "Se eliminará la asignatura y sus evaluaciones. Esta acción no se puede deshacer.",
+    "selectClassGroup": "Seleccioná un curso",
+    "filterByClassGroup": "Filtrar por curso",
+    "manageTeachers": "Docentes",
+    "teachersFor": "Docentes de {subject}",
+    "teachersEmpty": "Esta asignatura todavía no tiene docentes asignados",
+    "teacher": "Docente",
+    "selectTeacher": "Seleccioná un docente",
+    "isLead": "Docente titular",
+    "removeTeacherConfirm": "Se quitará al docente de esta asignatura.",
+    "teacherCount": "{count, plural, =0 {Sin docentes} one {# docente} other {# docentes}}"
   },
   "evaluations": {
     "title": "Evaluaciones",
@@ -209,7 +254,31 @@
     "role": "Rol",
     "active": "Activo",
     "new": "Nuevo usuario",
-    "empty": "Todavía no hay usuarios"
+    "empty": "Todavía no hay usuarios",
+    "createTitle": "Nuevo usuario",
+    "editTitle": "Editar usuario",
+    "deleteConfirm": "Se desactivará y eliminará la cuenta del usuario. Esta acción no se puede deshacer.",
+    "selectRole": "Seleccioná un rol",
+    "filterByRole": "Filtrar por rol",
+    "name": "Nombre"
+  },
+  "enrollments": {
+    "title": "Inscripciones",
+    "subtitle": "Inscribí estudiantes en los cursos",
+    "student": "Estudiante",
+    "classGroup": "Curso",
+    "academicYear": "Año lectivo",
+    "studentNumber": "Legajo",
+    "enrolledAt": "Fecha de inscripción",
+    "status": "Estado",
+    "new": "Nueva inscripción",
+    "empty": "Todavía no hay inscripciones",
+    "createTitle": "Inscribir estudiante",
+    "deleteConfirm": "Se dará de baja la inscripción del estudiante. Esta acción no se puede deshacer.",
+    "selectStudent": "Seleccioná un estudiante",
+    "selectClassGroup": "Seleccioná un curso",
+    "filterByClassGroup": "Filtrar por curso",
+    "noStudents": "No hay estudiantes con perfil para inscribir"
   },
   "profile": {
     "title": "Mi perfil",

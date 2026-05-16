@@ -4,6 +4,7 @@ import {
   CalendarRange,
   ClipboardList,
   FileText,
+  GraduationCap,
   LayoutDashboard,
   type LucideIcon,
   PenSquare,
@@ -36,6 +37,12 @@ export const NAV_ITEMS: NavItem[] = [
     labelKey: 'subjects',
     icon: BookOpen,
     roles: ['ADMIN', 'PRINCIPAL', 'TEACHER'],
+  },
+  {
+    href: '/enrollments',
+    labelKey: 'enrollments',
+    icon: GraduationCap,
+    roles: ['ADMIN', 'PRINCIPAL'],
   },
   {
     href: '/evaluations',
