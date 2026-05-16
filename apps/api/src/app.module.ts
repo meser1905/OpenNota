@@ -3,6 +3,7 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
 import { AppController } from './app.controller';
+import { AccessControlModule } from './common/access/access-control.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { CacheModule } from './common/cache/cache.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
@@ -41,6 +42,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }]),
     PrismaModule,
+    AccessControlModule,
     CacheModule,
     JobsModule,
     MailerModule,

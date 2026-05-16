@@ -15,7 +15,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="bg-background min-h-screen font-sans antialiased">
+      {/* suppressHydrationWarning: browser extensions (password managers,
+          antivirus) inject attributes into <body> before React hydrates;
+          this stops the resulting one-level attribute mismatch warning. */}
+      <body className="bg-background min-h-screen font-sans antialiased" suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>{children}</Providers>
         </NextIntlClientProvider>

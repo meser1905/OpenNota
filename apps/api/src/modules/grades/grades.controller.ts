@@ -17,14 +17,18 @@ export class GradesController {
   constructor(private readonly gradesService: GradesService) {}
 
   @Get()
-  list(@Query('evaluationId') evaluationId?: string) {
-    return this.gradesService.listByEvaluation(evaluationId);
+  list(@CurrentUser() user: JwtPayload, @Query('evaluationId') evaluationId?: string) {
+    return this.gradesService.listByEvaluation(user, evaluationId);
   }
 
   /** Students-by-evaluations matrix backing the grade entry sheet. */
   @Get('sheet')
-  sheet(@Query('subjectId') subjectId?: string, @Query('termId') termId?: string) {
-    return this.gradesService.getGradeSheet(subjectId, termId);
+  sheet(
+    @CurrentUser() user: JwtPayload,
+    @Query('subjectId') subjectId?: string,
+    @Query('termId') termId?: string,
+  ) {
+    return this.gradesService.getGradeSheet(user, subjectId, termId);
   }
 
   @Post()

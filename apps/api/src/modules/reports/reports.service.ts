@@ -1,7 +1,8 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import type { JobRunner } from '@opennota/shared';
+import { AccessControlService } from '../../common/access/access-control.service';
 import type { JwtPayload } from '../../common/auth/jwt-payload';
 import { JOB_RUNNER } from '../../common/jobs/jobs.module';
 import { PrismaService } from '../../common/prisma/prisma.service';
@@ -41,8 +42,6 @@ export interface ReportCard {
   generatedAt: Date;
 }
 
-const STAFF_ROLES = new Set(['ADMIN', 'PRINCIPAL', 'TEACHER']);
-
 function roundToTwo(value: number): number {
   return Math.round(value * 100) / 100;
 }
@@ -53,6 +52,7 @@ export class ReportsService {
     private readonly prisma: PrismaService,
     private readonly calculation: GradeCalculationService,
     private readonly config: AppConfig,
+    private readonly access: AccessControlService,
     @Inject(JOB_RUNNER) private readonly jobRunner: JobRunner,
   ) {}
 
@@ -89,6 +89,20 @@ export class ReportsService {
         studentNumber: link.student.studentNumber,
       }));
     }
+    if (user.role === 'TEACHER') {
+      const studentIds = await this.access.teacherStudentIds(user.sub);
+      const taught = await this.prisma.studentProfile.findMany({
+        where: { id: { in: studentIds } },
+        include: { user: true },
+        orderBy: { user: { lastName: 'asc' } },
+      });
+      return taught.map((profile) => ({
+        id: profile.id,
+        firstName: profile.user.firstName,
+        lastName: profile.user.lastName,
+        studentNumber: profile.studentNumber,
+      }));
+    }
     const profiles = await this.prisma.studentProfile.findMany({
       include: { user: true },
       orderBy: { user: { lastName: 'asc' } },
@@ -103,7 +117,7 @@ export class ReportsService {
 
   /** Builds a student's full report card for a term. */
   async getReportCard(user: JwtPayload, studentId: string, termId: string): Promise<ReportCard> {
-    await this.assertCanViewStudent(user, studentId);
+    await this.access.assertCanViewStudent(user, studentId);
 
     const student = await this.prisma.studentProfile.findUnique({
       where: { id: studentId },
@@ -259,31 +273,5 @@ export class ReportsService {
       },
       { path: filePath, data: pdf },
     );
-  }
-
-  private async assertCanViewStudent(user: JwtPayload, studentId: string): Promise<void> {
-    if (STAFF_ROLES.has(user.role)) {
-      return;
-    }
-    const student = await this.prisma.studentProfile.findUnique({ where: { id: studentId } });
-    if (!student) {
-      throw new NotFoundException('Student not found');
-    }
-    if (user.role === 'STUDENT') {
-      if (student.userId !== user.sub) {
-        throw new ForbiddenException('You can only view your own report card');
-      }
-      return;
-    }
-    if (user.role === 'GUARDIAN') {
-      const link = await this.prisma.studentGuardian.findFirst({
-        where: { studentId, guardian: { userId: user.sub } },
-      });
-      if (!link) {
-        throw new ForbiddenException('You can only view report cards for your students');
-      }
-      return;
-    }
-    throw new ForbiddenException('You do not have permission to view this report card');
   }
 }

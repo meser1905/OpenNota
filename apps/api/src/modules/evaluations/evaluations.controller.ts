@@ -29,16 +29,17 @@ export class EvaluationsController {
 
   @Get()
   list(
+    @CurrentUser() user: JwtPayload,
     @Query('subjectId') subjectId?: string,
     @Query('termId') termId?: string,
     @Query('classGroupId') classGroupId?: string,
   ) {
-    return this.evaluationsService.list({ subjectId, termId, classGroupId });
+    return this.evaluationsService.list(user, { subjectId, termId, classGroupId });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.evaluationsService.findOne(id);
+  findOne(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
+    return this.evaluationsService.getOne(user, id);
   }
 
   @Post()

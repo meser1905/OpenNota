@@ -1,11 +1,7 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import type { Evaluation, Grade } from '@opennota/db';
 import type { BatchUpsertGradesInput, UpsertGradeInput } from '@opennota/shared';
+import { AccessControlService } from '../../common/access/access-control.service';
 import type { JwtPayload } from '../../common/auth/jwt-payload';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { GradeCalculationService } from './grade-calculation.service';
@@ -15,6 +11,7 @@ export class GradesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly calculation: GradeCalculationService,
+    private readonly access: AccessControlService,
   ) {}
 
   /** Creates or updates one student's grade for an evaluation. */
@@ -87,20 +84,26 @@ export class GradesService {
     return { updated: input.grades.length };
   }
 
-  async listByEvaluation(evaluationId: string | undefined) {
+  async listByEvaluation(user: JwtPayload, evaluationId: string | undefined) {
     if (!evaluationId) {
       throw new BadRequestException('The evaluationId query parameter is required');
     }
-    const grades = await this.prisma.grade.findMany({
+    const evaluation = await this.prisma.evaluation.findFirst({
+      where: { id: evaluationId, deletedAt: null },
+    });
+    if (!evaluation) {
+      throw new NotFoundException('Evaluation not found');
+    }
+    await this.access.assertCanManageSubject(user, evaluation.subjectId);
+    return this.prisma.grade.findMany({
       where: { evaluationId },
       include: { student: { include: { user: { omit: { passwordHash: true } } } } },
       orderBy: { student: { user: { lastName: 'asc' } } },
     });
-    return grades;
   }
 
   /** Returns the students-by-evaluations matrix used by the grade entry sheet. */
-  async getGradeSheet(subjectId: string | undefined, termId: string | undefined) {
+  async getGradeSheet(user: JwtPayload, subjectId: string | undefined, termId: string | undefined) {
     if (!subjectId || !termId) {
       throw new BadRequestException('Both subjectId and termId query parameters are required');
     }
@@ -110,6 +113,7 @@ export class GradesService {
     if (!subject) {
       throw new NotFoundException('Subject not found');
     }
+    await this.access.assertCanManageSubject(user, subjectId);
 
     const evaluations = await this.prisma.evaluation.findMany({
       where: { subjectId, termId, deletedAt: null },
@@ -173,20 +177,7 @@ export class GradesService {
     if (term?.isClosed === true) {
       throw new BadRequestException('This term is closed and no longer accepts grade changes');
     }
-    await this.assertCanManageSubject(user, evaluation.subjectId);
+    await this.access.assertCanManageSubject(user, evaluation.subjectId);
     return evaluation;
-  }
-
-  /** Teachers may only manage subjects they are assigned to; staff may manage any. */
-  private async assertCanManageSubject(user: JwtPayload, subjectId: string): Promise<void> {
-    if (user.role === 'ADMIN' || user.role === 'PRINCIPAL') {
-      return;
-    }
-    const assignment = await this.prisma.teacherSubject.findFirst({
-      where: { subjectId, teacher: { userId: user.sub } },
-    });
-    if (!assignment) {
-      throw new ForbiddenException('You are not assigned to this subject');
-    }
   }
 }

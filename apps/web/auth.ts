@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import type { JWT } from 'next-auth/jwt';
 import type { UserRole } from '@opennota/shared';
+import { canAccessRoute } from '@/lib/route-permissions';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
 
@@ -70,12 +71,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     authorized: ({ auth: session, request }) => {
-      const isLoggedIn = Boolean(session?.user);
-      const isOnLogin = request.nextUrl.pathname.startsWith('/login');
-      if (isOnLogin) {
-        return isLoggedIn ? Response.redirect(new URL('/', request.nextUrl)) : true;
+      const { pathname } = request.nextUrl;
+      const user = session?.user;
+      if (pathname.startsWith('/login')) {
+        return user ? Response.redirect(new URL('/', request.nextUrl)) : true;
       }
-      return isLoggedIn;
+      if (!user) {
+        return false;
+      }
+      // Logged in but the role may not open this route: send them home
+      // rather than to the login page, which would be confusing.
+      if (!canAccessRoute(user.role, pathname)) {
+        return Response.redirect(new URL('/', request.nextUrl));
+      }
+      return true;
     },
     jwt: async ({ token, user }) => {
       if (user) {

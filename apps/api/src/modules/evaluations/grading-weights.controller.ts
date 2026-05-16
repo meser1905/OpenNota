@@ -15,8 +15,12 @@ export class GradingWeightsController {
   constructor(private readonly gradingWeightsService: GradingWeightsService) {}
 
   @Get()
-  get(@Query('subjectId') subjectId?: string, @Query('termId') termId?: string) {
-    return this.gradingWeightsService.get(subjectId, termId);
+  get(
+    @CurrentUser() user: JwtPayload,
+    @Query('subjectId') subjectId?: string,
+    @Query('termId') termId?: string,
+  ) {
+    return this.gradingWeightsService.get(user, subjectId, termId);
   }
 
   @Put()

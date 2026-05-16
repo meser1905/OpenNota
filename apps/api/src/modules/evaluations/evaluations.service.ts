@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import type { Evaluation } from '@opennota/db';
 import type { CreateEvaluationInput, UpdateEvaluationInput } from '@opennota/shared';
+import { AccessControlService } from '../../common/access/access-control.service';
 import type { JwtPayload } from '../../common/auth/jwt-payload';
 import { PrismaService } from '../../common/prisma/prisma.service';
 
@@ -17,13 +18,25 @@ interface EvaluationFilter {
 
 @Injectable()
 export class EvaluationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly access: AccessControlService,
+  ) {}
 
-  list(filter: EvaluationFilter): Promise<Evaluation[]> {
+  /** Lists evaluations. Teachers see only their assigned subjects' evaluations. */
+  async list(user: JwtPayload, filter: EvaluationFilter): Promise<Evaluation[]> {
+    let subjectId: string | { in: string[] } | undefined = filter.subjectId;
+    if (user.role === 'TEACHER') {
+      if (filter.subjectId !== undefined) {
+        await this.access.assertCanManageSubject(user, filter.subjectId);
+      } else {
+        subjectId = { in: await this.access.teacherSubjectIds(user.sub) };
+      }
+    }
     return this.prisma.evaluation.findMany({
       where: {
         deletedAt: null,
-        subjectId: filter.subjectId,
+        subjectId,
         termId: filter.termId,
         ...(filter.classGroupId ? { subject: { classGroupId: filter.classGroupId } } : {}),
       },
@@ -41,8 +54,15 @@ export class EvaluationsService {
     return evaluation;
   }
 
+  /** Loads an evaluation, asserting the user may access its subject. */
+  async getOne(user: JwtPayload, id: string): Promise<Evaluation> {
+    const evaluation = await this.findOne(id);
+    await this.access.assertCanManageSubject(user, evaluation.subjectId);
+    return evaluation;
+  }
+
   async create(user: JwtPayload, input: CreateEvaluationInput): Promise<Evaluation> {
-    await this.assertCanManageSubject(user, input.subjectId);
+    await this.access.assertCanManageSubject(user, input.subjectId);
     const teacherId = await this.resolveTeacherId(user, input.subjectId);
     return this.prisma.evaluation.create({
       data: {
@@ -65,7 +85,7 @@ export class EvaluationsService {
 
   async update(user: JwtPayload, id: string, input: UpdateEvaluationInput): Promise<Evaluation> {
     const evaluation = await this.findOne(id);
-    await this.assertCanManageSubject(user, evaluation.subjectId);
+    await this.access.assertCanManageSubject(user, evaluation.subjectId);
     return this.prisma.evaluation.update({
       where: { id },
       data: {
@@ -85,7 +105,7 @@ export class EvaluationsService {
 
   async remove(user: JwtPayload, id: string): Promise<void> {
     const evaluation = await this.findOne(id);
-    await this.assertCanManageSubject(user, evaluation.subjectId);
+    await this.access.assertCanManageSubject(user, evaluation.subjectId);
     await this.prisma.evaluation.update({ where: { id }, data: { deletedAt: new Date() } });
   }
 
@@ -110,17 +130,5 @@ export class EvaluationsService {
       throw new BadRequestException('Assign a teacher to this subject before creating evaluations');
     }
     return assignment.teacherId;
-  }
-
-  private async assertCanManageSubject(user: JwtPayload, subjectId: string): Promise<void> {
-    if (user.role === 'ADMIN' || user.role === 'PRINCIPAL') {
-      return;
-    }
-    const assignment = await this.prisma.teacherSubject.findFirst({
-      where: { subjectId, teacher: { userId: user.sub } },
-    });
-    if (!assignment) {
-      throw new ForbiddenException('You are not assigned to this subject');
-    }
   }
 }
